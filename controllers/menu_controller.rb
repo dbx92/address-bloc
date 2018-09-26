@@ -13,7 +13,8 @@ class MenuController
      puts "2 - Create an entry"
      puts "3 - Search for an entry"
      puts "4 - Import entries from a CSV"
-     puts "5 - Exit"
+     puts "5 - View entry by number"
+     puts "6 - Exit"
      print "Enter your selection: "
 
      selection = gets.to_i
@@ -36,8 +37,13 @@ class MenuController
        read_csv
        main_menu
      when 5
+       system "clear"
+       view_entry_number
+       main_menu
+     when 6
        puts "Good-bye"
        exit(0)
+
      else
        system "clear"
        puts "Sorry, that is not a valid input"
@@ -46,15 +52,16 @@ class MenuController
 end
 
  def view_all_entries
-   address_book.entries.each do |entry|
-     system "clear"
-     puts entry.to_s
+   address_book.entries.each_with_index do |entry, i|
 
-     entry_submenu(entry)
+     puts "#{i + 1}. " + entry.to_s
+     puts "\n"
    end
+
+  main_menu
    system "clear"
    puts "End of entries"
- end
+end
 
  def create_entry
    system "clear"
@@ -76,6 +83,25 @@ end
  def read_csv
  end
 
+ def view_entry_number
+   system "clear"
+   address_book.entries.each_with_index do |entry, i|
+
+     puts "#{i + 1}. " + entry.to_s
+     puts "\n"
+   end
+
+   print "#{address_book.entries.count} Entries available - select an entry number\n"
+
+   selection = gets.to_i
+   if selection > address_book.entries.count
+     print "#{selection} is not valid\n"
+   else
+     system "clear"
+     puts "#{selection}.  #{address_book.entries[selection-1]}"
+   end
+ end
+
  def entry_submenu(entry)
    puts "n - next entry"
    puts "d - delete entry"
@@ -91,6 +117,7 @@ end
    when "m"
      system "clear"
      main_menu
+
    else
      system "clear"
      puts "#{selection} is not a valid input"
